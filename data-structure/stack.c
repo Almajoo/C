@@ -1,60 +1,68 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-typedef struct stack {
-    void *data;
-    struct stack *next;
-} stack_t;
-
-int push(stack_t **stack, void *v){
-    stack_t *tmp;
-    int ret;
-
-    tmp = malloc(sizeof(stack_t));
-    if(tmp == NULL){
-        ret = 1;
-        goto end;
+#include<stdio.h>
+#include<stdlib.h>
+# define MAX_SIZE 10
+int stack[MAX_SIZE];
+int top=-1;
+void push(int data);
+void pop();
+void main()
+{
+    int choice,data;
+    while(1){
+    printf("Stack implementation program\n");
+    printf("1. Push\n");
+    printf("2. Pop\n");
+    printf("3. Exit\n");
+    printf("\n Enter your choice\n");
+    scanf("%d",&choice);
+    switch(choice)
+    {
+        case 1:  
+            printf("Enter data to push into stack:");
+            scanf("%d",&data);
+            push(data);
+            break;
+        case 2:
+            printf("Poping from stack\n");
+            pop();
+            break;
+        case 3:
+            printf("exiting program\n");
+            exit(0);
+            break; 
+        default:
+            printf("invalid choice, please try again");       
     }
-
-    tmp->data = v;
-    tmp->next = *stack;
-    *stack = tmp;
-
-    ret = 0;
-
-    end:
-    return ret;
+    printf("\n\n");}
 }
-
-stack_t *pop(stack_t **stack){
-    stack_t *ret;
-
-    if(*stack == NULL){
-        ret = NULL;
-        goto end;
+void push(int data)
+{
+    if(top<MAX_SIZE)
+    {
+        int i;
+        ++top;
+        stack[top]= data;
+        printf("Updated stack is\t");
+        for(i=0;i<=top;i++)
+            printf("%d  ",stack[i]);
+        printf("\n\n");    
     }
-
-    ret = *stack;
-    *stack = ret->next;
-
-
-    end:
-    return ret;
+    else
+        printf("Stack Overflow");
 }
-
-int main(void){
-    stack_t *stack = NULL, *element;
-    size_t i;
-
-    for(i=0; i<5; i++){
-        push(&stack, (void *)i);
-        push(&stack, (void *)(i*2));
+void pop()
+{
+    if (top==-1)
+        printf("Stack Underflow");
+    else
+    {
+        int i,item;
+        item=stack[top];
+        --top;
+        printf("Element poped is %d\n",item);
+        printf("Updated stack is\t");
+        for(i=0;i<=top;i++)
+            printf("%d  ",stack[i]);
+        printf("\n\n");    
     }
-
-    while((element = pop(&stack))){
-        printf("value => %zu\n", (size_t)element->data);
-        free(element);
-    }
-
-    return 0;
 }
